@@ -1,1 +1,6 @@
-feedparser, requests, pytz, python-dateutil
+requests==2.31.0
+beautifulsoup4==4.12.3
+pandas==2.2.0
+pytz==2024.1
+python-dateutil==2.8.2
+lxml==5.1.0
