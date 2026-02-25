@@ -1,0 +1,24 @@
+name: Update iThome Stats
+on:
+  schedule:
+    - cron: '0 0 * * *' # 每天凌晨執行一次
+  workflow_dispatch: # 允許手動執行
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+      - name: Install dependencies
+        run: pip install feedparser requests pytz python-dateutil
+      - name: Run script
+        run: python main.py
+      - name: Deploy to GitHub Pages
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          folder: . # 將產生的 index.html 部署
+          branch: gh-pages
