@@ -11,7 +11,6 @@ def fetch_channel_data(channel_name, base_url):
     headers = {
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36',
     }
-    # 設定統計起點
     cutoff_date = datetime(2026, 1, 1)
     
     for page in range(0, 3):
@@ -35,7 +34,6 @@ def fetch_channel_data(channel_name, base_url):
                 if title_el and date_el:
                     date_raw = date_el.text.strip()
                     try:
-                        # 精準擷取 YYYY-MM-DD
                         clean_date_str = re.search(r'\d{4}-\d{2}-\d{2}', date_raw).group()
                         post_date = datetime.strptime(clean_date_str, '%Y-%m-%d')
                     except:
@@ -44,18 +42,15 @@ def fetch_channel_data(channel_name, base_url):
                     if post_date < cutoff_date: continue
                     page_has_2026 = True
                     
-                    # 作者人名清洗：處理「文/周峻佑」、「文 / 蘇文彬」等格式
+                    # 作者人名清洗：只留下人名
                     raw_author = author_el.get_text(strip=True) if author_el else "iThome 編輯"
                     author_name = re.sub(r'^(文|編譯|特約記者)\s*/\s*', '', raw_author)
-                    # 再次移除可能存在的日期尾碼
                     author_name = re.split(r'[||\d{4}]', author_name)[0].strip()
-                    
                     if not author_name: author_name = "iThome 編輯"
 
-                    # 計算週標籤：W08 (02/16-02/22)
+                    # 計算週標籤：WXX (MM/DD-MM/DD)
                     monday = post_date - timedelta(days=post_date.weekday())
                     sunday = monday + timedelta(days=6)
-                    # 使用 isocalendar 確保週數正確
                     iso_year, iso_week, iso_day = post_date.isocalendar()
                     week_label = f"W{iso_week:02d} ({monday.strftime('%m/%d')}-{sunday.strftime('%m/%d')})"
 
@@ -76,34 +71,32 @@ def fetch_channel_data(channel_name, base_url):
     return articles
 
 def create_web_page(all_articles):
-    # 建立台灣時區時間 (UTC+8)
     tw_time = datetime.now(timezone(timedelta(hours=8))).strftime('%Y-%m-%d %H:%M')
-    
     df_raw = pd.DataFrame(all_articles)
     
     if df_raw.empty:
-        html_content = f"<html><body style='padding:50px;text-align:center;'><h1>目前尚無 2026 年資料</h1><p>更新時間：{tw_time}</p></body></html>"
+        html_content = f"<html><body><h1 style='text-align:center;'>目前無 2026 年資料</h1></body></html>"
     else:
-        # 確保排序正確 (依週別標籤)
+        # 排序週標籤
         df_raw = df_raw.sort_values(['week_label', 'date'])
         
-        # 1. 作者統計 (去重)
+        # 1. 作者發文實績 (週發文矩陣)
+        # 先去重，確保同一篇文章不重複計入作者產量
         df_author = df_raw.drop_duplicates(subset=['url_path']).copy()
-        author_weekly = df_author.pivot_table(index='author', columns='week_label', values='title', aggfunc='count', fill_value=0)
+        author_pivot = df_author.pivot_table(index='author', columns='week_label', values='title', aggfunc='count', fill_value=0)
         
-        # 2. 頻道統計 (含重複)
-        channel_weekly = df_raw.pivot_table(index='channel', columns='week_label', values='title', aggfunc='count', fill_value=0)
+        # 增加右側「總計」欄位
+        author_pivot['總計'] = author_pivot.sum(axis=1)
+        author_pivot = author_pivot.sort_values('總計', ascending=False)
+        
+        # 2. 頻道統計 (含全站最新，允許重複計入分流)
+        channel_pivot = df_raw.pivot_table(index='channel', columns='week_label', values='title', aggfunc='count', fill_value=0)
+        channel_pivot['總計'] = channel_pivot.sum(axis=1)
         
         # 圖表數據
         channel_total = df_raw.groupby('channel').size().sort_values(ascending=False)
         chart_labels = channel_total.index.tolist()
         chart_values = channel_total.values.tolist()
-        
-        # 明細
-        list_df = df_author.sort_values('date', ascending=False).copy()
-        list_df['title_link'] = list_df.apply(lambda x: f'<a href="{x["url"]}" target="_blank">{x["title"]}</a>', axis=1)
-        list_df = list_df[['date', 'author', 'title_link']]
-        list_df['date'] = list_df['date'].dt.strftime('%Y-%m-%d')
 
         html_content = f"""
         <!DOCTYPE html>
@@ -111,65 +104,68 @@ def create_web_page(all_articles):
         <head>
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>iThome 2026 戰情室 - {tw_time}</title>
+            <title>iThome 2026 戰情室</title>
             <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
             <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
             <style>
                 body {{ background-color: #f8f9fa; padding: 25px; font-family: "Microsoft JhengHei", sans-serif; }}
-                .card {{ border: none; box-shadow: 0 4px 12px rgba(0,0,0,0.08); margin-bottom: 25px; border-radius: 12px; }}
+                .card {{ border: none; box-shadow: 0 4px 15px rgba(0,0,0,0.05); margin-bottom: 30px; border-radius: 15px; }}
+                .card-header {{ background-color: #fff; border-bottom: 1px solid #eee; font-weight: bold; color: #0d6efd; }}
+                .table thead {{ background: #212529; color: white; }}
+                .table-sm td, .table-sm th {{ font-size: 0.9rem; text-align: center; vertical-align: middle; }}
+                .author-name {{ text-align: left !important; font-weight: bold; background: #fdfdfd; }}
+                .total-col {{ background-color: #e9ecef; font-weight: bold; }}
                 h2 {{ color: #0d6efd; font-weight: bold; }}
-                .table thead {{ background: #212529; color: white; text-align: center; font-size: 0.9rem; }}
-                .table td {{ text-align: center; vertical-align: middle; }}
-                .author-cell {{ font-weight: bold; color: #495057; text-align: left !important; }}
-                .stat-info {{ font-size: 0.85rem; color: #6c757d; margin-bottom: 10px; }}
             </style>
         </head>
         <body>
             <div class="container-fluid">
-                <div class="d-flex justify-content-between align-items-end mb-4 px-2">
-                    <div>
-                        <h2>📊 iThome 數據統計戰情室</h2>
-                        <div class="stat-info">自動追蹤 2026 年起之發文產能</div>
-                    </div>
-                    <span class="badge bg-dark mb-2">最後更新 (台北)：{tw_time}</span>
-                </div>
-                
-                <div class="row">
-                    <div class="col-xl-9">
-                        <div class="card"><div class="card-body">
-                            <h5 class="fw-bold mb-3">👤 作者發文實績 <small class="text-muted fw-normal">(排除分流，真實產量)</small></h5>
-                            <div class="table-responsive">{author_weekly.to_html(classes='table table-hover table-bordered table-sm', border=0)}</div>
-                        </div></div>
-                        
-                        <div class="card"><div class="card-body">
-                            <h5 class="fw-bold mb-3">📅 頻道經營產量 <small class="text-muted fw-normal">(含跨頻道重複計算)</small></h5>
-                            <div class="table-responsive">{channel_weekly.to_html(classes='table table-hover table-bordered table-sm', border=0)}</div>
-                        </div></div>
-                    </div>
-                    
-                    <div class="col-xl-3">
-                        <div class="card"><div class="card-body">
-                            <h5 class="fw-bold mb-4">📈 頻道分佈佔比</h5>
-                            <canvas id="channelChart"></canvas>
-                        </div></div>
-                    </div>
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h2>📊 iThome 作者發文戰情室</h2>
+                    <span class="badge bg-dark">最後更新：{tw_time} (台北)</span>
                 </div>
 
-                <div class="card"><div class="card-body">
-                    <h5 class="fw-bold mb-3">📝 2026 文章明細 <small class="text-muted fw-normal">(顯示最新 60 筆)</small></h5>
-                    <div class="table-responsive">{list_df.head(60).to_html(classes='table table-striped table-hover', escape=False, index=False, border=0)}</div>
-                </div></div>
+                <div class="row">
+                    <div class="col-lg-9">
+                        <div class="card">
+                            <div class="card-header">👤 每位作者每週發文實績 (不重複計)</div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    {author_pivot.to_html(classes='table table-bordered table-hover table-sm', border=0)}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card">
+                            <div class="card-header">📅 頻道每週發文統計 (含全站最新 & 分流重複計)</div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    {channel_pivot.to_html(classes='table table-bordered table-hover table-sm', border=0)}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-3">
+                        <div class="card">
+                            <div class="card-header">📈 頻道分佈佔比</div>
+                            <div class="card-body">
+                                <canvas id="channelChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <script>
-                new Chart(document.getElementById('channelChart'), {{
+                const ctx = document.getElementById('channelChart').getContext('2d');
+                new Chart(ctx, {{
                     type: 'doughnut',
                     data: {{
                         labels: {json.dumps(chart_labels, ensure_ascii=False)},
                         datasets: [{{
                             data: {json.dumps(chart_values)},
-                            backgroundColor: ['#0d6efd', '#6610f2', '#6f42c1', '#d63384', '#dc3545', '#fd7e14', '#ffc107', '#20c997'],
-                            borderWidth: 2
+                            backgroundColor: ['#0d6efd', '#6610f2', '#6f42c1', '#d63384', '#dc3545', '#fd7e14', '#ffc107', '#20c997']
                         }}]
                     }},
                     options: {{ responsive: true, plugins: {{ legend: {{ position: 'bottom' }} }} }}
@@ -191,10 +187,8 @@ if __name__ == "__main__":
         "人物": "https://www.ithome.com.tw/people",
         "資安": "https://www.ithome.com.tw/security"
     }
-    
     all_data = []
     for name, url in channels.items():
         all_data.extend(fetch_channel_data(name, url))
-    
     create_web_page(all_data)
-    print(f"✅ 報表生成完成！總計紀錄: {len(all_data)}")
+    print("✅ 儀表板已更新，包含每週作者發文矩陣。")
