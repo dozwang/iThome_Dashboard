@@ -7,10 +7,11 @@
         .card-header{background:#fff;font-weight:bold;padding:4px 10px;border-bottom:1px solid #eee;color:#0560bd;font-size:12px;}
         .table thead th{background:#2c3e50!important;color:#ffffff!important;border-color:#34495e;position:sticky;top:0;z-index:2;}
         .table-sm th, .table-sm td{padding:1px 4px!important;text-align:center;border-color:#dee2e6;vertical-align:middle;}
-        .table-responsive{max-height:75vh;overflow:auto;}
+        .table-responsive{max-height:80vh;overflow:auto;}
+        /* 直式表格的首欄(週數)固定 */
         .table td:first-child, .table th:first-child {
             position:sticky;left:0;z-index:1;background:#f8f9fa!important;text-align:left!important;
-            font-weight:bold;min-width:85px;box-shadow:1px 0 3px rgba(0,0,0,0.05);
+            font-weight:bold;min-width:110px;box-shadow:1px 0 3px rgba(0,0,0,0.05);
         }
         .table thead th:first-child{z-index:3;color:#ffffff!important;}
         .high-productivity {background-color:#c3e6cb!important;color:#155724!important;font-weight:bold!important;}
@@ -20,213 +21,12 @@
         <h5>📊 iThome 2026 數據戰情室</h5>
         <div class="row g-2">
             <div class="col-xl-9">
-                <div class="card"><div class="card-header">👤 記者發文實績</div>
+                <div class="card"><div class="card-header">📅 頻道經營統計 (置頂)</div>
                 <div class="table-responsive"><table class="dataframe table table-bordered table-sm table-hover">
   <thead>
     <tr style="text-align: right;">
       <th></th>
-      <th>W02 (01/05-01/11)</th>
-      <th>W03 (01/12-01/18)</th>
-      <th>W04 (01/19-01/25)</th>
-      <th>W05 (01/26-02/01)</th>
-      <th>W06 (02/02-02/08)</th>
-      <th>W07 (02/09-02/15)</th>
-      <th>W08 (02/16-02/22)</th>
-      <th>W09 (02/23-03/01)</th>
-      <th>總計</th>
-      <th>日均</th>
-    </tr>
-    <tr>
-      <th>作者</th>
-      <th></th>
-      <th></th>
-      <th></th>
-      <th></th>
-      <th></th>
-      <th></th>
-      <th></th>
-      <th></th>
-      <th></th>
-      <th></th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>周峻佑</th>
-      <td>0</td>
-      <td>0</td>
-      <td class="high-productivity">18</td>
-      <td class="high-productivity">20</td>
-      <td class="high-productivity">18</td>
-      <td class="high-productivity">24</td>
-      <td>0</td>
-      <td class="high-productivity">12</td>
-      <td class="high-productivity">92</td>
-      <td>1.61</td>
-    </tr>
-    <tr>
-      <th>李建興</th>
-      <td>0</td>
-      <td>3</td>
-      <td class="high-productivity">15</td>
-      <td class="high-productivity">15</td>
-      <td class="high-productivity">16</td>
-      <td class="high-productivity">21</td>
-      <td class="high-productivity">11</td>
-      <td class="high-productivity">11</td>
-      <td class="high-productivity">92</td>
-      <td>1.61</td>
-    </tr>
-    <tr>
-      <th>林妍溱</th>
-      <td>0</td>
-      <td>1</td>
-      <td class="high-productivity">16</td>
-      <td class="high-productivity">16</td>
-      <td class="high-productivity">15</td>
-      <td class="high-productivity">16</td>
-      <td class="high-productivity">6</td>
-      <td class="high-productivity">6</td>
-      <td class="high-productivity">76</td>
-      <td>1.33</td>
-    </tr>
-    <tr>
-      <th>陳曉莉</th>
-      <td>1</td>
-      <td>1</td>
-      <td class="high-productivity">17</td>
-      <td class="high-productivity">17</td>
-      <td class="high-productivity">11</td>
-      <td class="high-productivity">11</td>
-      <td>4</td>
-      <td class="high-productivity">7</td>
-      <td class="high-productivity">69</td>
-      <td>1.21</td>
-    </tr>
-    <tr>
-      <th>王珮瑤</th>
-      <td>0</td>
-      <td>0</td>
-      <td>3</td>
-      <td class="high-productivity">9</td>
-      <td class="high-productivity">8</td>
-      <td class="high-productivity">9</td>
-      <td>0</td>
-      <td class="high-productivity">7</td>
-      <td class="high-productivity">36</td>
-      <td>0.63</td>
-    </tr>
-    <tr>
-      <th>蘇文彬</th>
-      <td>2</td>
-      <td>0</td>
-      <td>2</td>
-      <td>1</td>
-      <td>1</td>
-      <td class="high-productivity">8</td>
-      <td>0</td>
-      <td>2</td>
-      <td class="high-productivity">16</td>
-      <td>0.28</td>
-    </tr>
-    <tr>
-      <th>羅正漢</th>
-      <td>0</td>
-      <td>0</td>
-      <td>3</td>
-      <td>3</td>
-      <td>2</td>
-      <td class="high-productivity">7</td>
-      <td>0</td>
-      <td>0</td>
-      <td class="high-productivity">15</td>
-      <td>0.26</td>
-    </tr>
-    <tr>
-      <th>李宗翰</th>
-      <td>0</td>
-      <td>2</td>
-      <td>4</td>
-      <td>5</td>
-      <td>2</td>
-      <td>1</td>
-      <td>1</td>
-      <td>0</td>
-      <td class="high-productivity">15</td>
-      <td>0.26</td>
-    </tr>
-    <tr>
-      <th>王若樸</th>
-      <td>1</td>
-      <td>3</td>
-      <td>2</td>
-      <td>2</td>
-      <td>3</td>
-      <td>3</td>
-      <td>0</td>
-      <td>1</td>
-      <td class="high-productivity">15</td>
-      <td>0.26</td>
-    </tr>
-    <tr>
-      <th>王宏仁</th>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>5</td>
-      <td>2</td>
-      <td>5</td>
-      <td>0</td>
-      <td>1</td>
-      <td class="high-productivity">13</td>
-      <td>0.23</td>
-    </tr>
-    <tr>
-      <th>張明德</th>
-      <td>0</td>
-      <td>0</td>
-      <td>4</td>
-      <td>1</td>
-      <td>0</td>
-      <td>5</td>
-      <td>0</td>
-      <td>1</td>
-      <td class="high-productivity">11</td>
-      <td>0.19</td>
-    </tr>
-    <tr>
-      <th>黃彥棻</th>
-      <td>0</td>
-      <td>1</td>
-      <td>1</td>
-      <td>1</td>
-      <td>0</td>
-      <td>1</td>
-      <td>0</td>
-      <td>0</td>
-      <td>4</td>
-      <td>0.07</td>
-    </tr>
-    <tr>
-      <th>吳其勳</th>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>1</td>
-      <td>0</td>
-      <td>0</td>
-      <td>1</td>
-      <td>0.02</td>
-    </tr>
-  </tbody>
-</table></div></div>
-                <div class="card"><div class="card-header">📅 頻道經營統計</div>
-                <div class="table-responsive"><table class="dataframe table table-bordered table-sm table-hover">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
+      <th>W01 (12/29-01/04)</th>
       <th>W02 (01/05-01/11)</th>
       <th>W03 (01/12-01/18)</th>
       <th>W04 (01/19-01/25)</th>
@@ -248,20 +48,22 @@
       <th></th>
       <th></th>
       <th></th>
+      <th></th>
     </tr>
   </thead>
   <tbody>
     <tr>
       <th>全站最新</th>
-      <td>0</td>
-      <td>8</td>
+      <td>11</td>
+      <td>80</td>
       <td>86</td>
+      <td>85</td>
       <td>95</td>
-      <td>79</td>
-      <td>112</td>
+      <td>78</td>
+      <td>113</td>
       <td>22</td>
-      <td>48</td>
-      <td>450</td>
+      <td>61</td>
+      <td>631</td>
     </tr>
     <tr>
       <th>資安</th>
@@ -269,26 +71,29 @@
       <td>0</td>
       <td>0</td>
       <td>0</td>
-      <td>5</td>
-      <td>49</td>
+      <td>3</td>
+      <td>52</td>
+      <td>84</td>
       <td>8</td>
-      <td>78</td>
-      <td>140</td>
+      <td>133</td>
+      <td>280</td>
     </tr>
     <tr>
       <th>AI</th>
       <td>0</td>
       <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>20</td>
+      <td>6</td>
+      <td>17</td>
+      <td>37</td>
+      <td>29</td>
       <td>29</td>
       <td>13</td>
-      <td>13</td>
-      <td>75</td>
+      <td>19</td>
+      <td>150</td>
     </tr>
     <tr>
       <th>Cloud</th>
+      <td>0</td>
       <td>1</td>
       <td>3</td>
       <td>10</td>
@@ -296,11 +101,12 @@
       <td>9</td>
       <td>13</td>
       <td>0</td>
-      <td>0</td>
-      <td>54</td>
+      <td>1</td>
+      <td>55</td>
     </tr>
     <tr>
       <th>醫療IT</th>
+      <td>0</td>
       <td>2</td>
       <td>3</td>
       <td>1</td>
@@ -312,7 +118,21 @@
       <td>9</td>
     </tr>
     <tr>
+      <th>永續IT</th>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>4</td>
+      <td>6</td>
+    </tr>
+    <tr>
       <th>人物</th>
+      <td>0</td>
       <td>1</td>
       <td>1</td>
       <td>1</td>
@@ -323,26 +143,197 @@
       <td>0</td>
       <td>5</td>
     </tr>
+  </tbody>
+</table></div></div>
+                <div class="card"><div class="card-header">👤 記者發文實績 (直式排版)</div>
+                <div class="table-responsive"><table class="dataframe table table-bordered table-sm table-hover">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>吳其勳</th>
+      <th>周峻佑</th>
+      <th>張明德</th>
+      <th>李宗翰</th>
+      <th>李建興</th>
+      <th>林妍溱</th>
+      <th>王宏仁</th>
+      <th>王珮瑤</th>
+      <th>王若樸</th>
+      <th>羅正漢</th>
+      <th>蘇文彬</th>
+      <th>陳曉莉</th>
+      <th>黃彥棻</th>
+    </tr>
     <tr>
-      <th>永續IT</th>
+      <th>週數</th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>W09 (02/23-03/01)</th>
+      <td>0</td>
+      <td class="high-productivity">15</td>
       <td>1</td>
       <td>0</td>
+      <td class="high-productivity">13</td>
+      <td class="high-productivity">7</td>
       <td>1</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
+      <td class="high-productivity">8</td>
+      <td>2</td>
       <td>2</td>
       <td>4</td>
+      <td class="high-productivity">9</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>W08 (02/16-02/22)</th>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td class="high-productivity">11</td>
+      <td class="high-productivity">6</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>4</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>W07 (02/09-02/15)</th>
+      <td>1</td>
+      <td class="high-productivity">24</td>
+      <td>5</td>
+      <td>1</td>
+      <td class="high-productivity">21</td>
+      <td class="high-productivity">16</td>
+      <td>5</td>
+      <td class="high-productivity">9</td>
+      <td>3</td>
+      <td class="high-productivity">7</td>
+      <td class="high-productivity">8</td>
+      <td class="high-productivity">11</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>W06 (02/02-02/08)</th>
+      <td>0</td>
+      <td class="high-productivity">18</td>
+      <td>0</td>
+      <td>2</td>
+      <td class="high-productivity">16</td>
+      <td class="high-productivity">15</td>
+      <td>2</td>
+      <td class="high-productivity">8</td>
+      <td>3</td>
+      <td>2</td>
+      <td>1</td>
+      <td class="high-productivity">11</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>W05 (01/26-02/01)</th>
+      <td>0</td>
+      <td class="high-productivity">20</td>
+      <td>1</td>
+      <td>5</td>
+      <td class="high-productivity">15</td>
+      <td class="high-productivity">16</td>
+      <td>5</td>
+      <td class="high-productivity">9</td>
+      <td>2</td>
+      <td>3</td>
+      <td>1</td>
+      <td class="high-productivity">17</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>W04 (01/19-01/25)</th>
+      <td>0</td>
+      <td class="high-productivity">18</td>
+      <td>4</td>
+      <td>4</td>
+      <td class="high-productivity">15</td>
+      <td class="high-productivity">16</td>
+      <td>0</td>
+      <td>3</td>
+      <td>2</td>
+      <td>3</td>
+      <td>2</td>
+      <td class="high-productivity">17</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>W03 (01/12-01/18)</th>
+      <td>0</td>
+      <td class="high-productivity">17</td>
+      <td>0</td>
+      <td>2</td>
+      <td class="high-productivity">20</td>
+      <td class="high-productivity">14</td>
+      <td>0</td>
+      <td class="high-productivity">6</td>
+      <td>3</td>
+      <td>4</td>
+      <td>1</td>
+      <td class="high-productivity">18</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>W02 (01/05-01/11)</th>
+      <td>0</td>
+      <td class="high-productivity">16</td>
+      <td>1</td>
+      <td>4</td>
+      <td class="high-productivity">16</td>
+      <td class="high-productivity">15</td>
+      <td>2</td>
+      <td>4</td>
+      <td>1</td>
+      <td>2</td>
+      <td>3</td>
+      <td class="high-productivity">15</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>W01 (12/29-01/04)</th>
+      <td>0</td>
+      <td>2</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>2</td>
+      <td>1</td>
+      <td>1</td>
+      <td>0</td>
+      <td>1</td>
+      <td>1</td>
+      <td>2</td>
+      <td>0</td>
     </tr>
   </tbody>
 </table></div></div>
             </div>
             <div class="col-xl-3">
                 <div class="card"><div class="card-body p-2"><canvas id="c"></canvas></div></div>
-                <div class="text-muted" style="font-size:10px;">最後更新：02/26 15:17 | 統計：57天</div>
+                <div class="text-muted" style="font-size:10px;">更新於：02/27 02:50</div>
             </div>
         </div>
     </div>
-    <script>new Chart(document.getElementById('c'),{type:'doughnut',data:{labels:["AI", "Cloud", "人物", "全站最新", "永續IT", "資安", "醫療IT"],datasets:[{data:[75, 54, 5, 450, 4, 140, 9],backgroundColor:['#0d6efd','#6610f2','#6f42c1','#d63384','#dc3545','#fd7e14','#ffc107','#20c997']}]},options:{plugins:{legend:{position:'bottom',labels:{boxWidth:10,font:{size:10}}}}})});</script>
+    <script>new Chart(document.getElementById('c'),{type:'doughnut',data:{labels:["AI", "Cloud", "人物", "全站最新", "永續IT", "資安", "醫療IT"],datasets:[{data:[150, 55, 5, 631, 6, 280, 9],backgroundColor:['#0d6efd','#6610f2','#6f42c1','#d63384','#dc3545','#fd7e14','#ffc107','#20c997']}]},options:{plugins:{legend:{position:'bottom',labels:{boxWidth:10,font:{size:10}}}}})});</script>
     </body></html>
