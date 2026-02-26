@@ -4,6 +4,7 @@ from datetime import datetime, timedelta, timezone
 import pandas as pd
 
 def get_real_author(article_url):
+    """進入文章內頁抓取真實作者姓名"""
     headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'}
     try:
         time.sleep(0.05)
@@ -12,16 +13,20 @@ def get_real_author(article_url):
         soup = BeautifulSoup(resp.text, 'html.parser')
         author_el = soup.select_one('.reporter, .author, .field-name-field-author, .views-field-field-reporter')
         if author_el:
+            # 清洗格式：文/周峻佑 -> 周峻佑
             name = re.sub(r'^(文|編譯|特約記者|特約|記者)\s*/\s*', '', author_el.get_text(strip=True))
             return name.split('|')[0].strip().split(' ')[0].split('（')[0]
-    except: pass
+    except:
+        pass
     return "iThome 編輯"
 
 def fetch_channel_data(name, base_url):
     articles = []
     headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'}
     cutoff = datetime(2026, 1, 1)
+    # 全站抓取 30 頁，其餘抓取 5 頁
     max_p = 30 if name == "全站最新" else 5
+    
     for page in range(max_p):
         try:
             resp = requests.get(f"{base_url}?page={page}", headers=headers, timeout=15)
@@ -29,6 +34,7 @@ def fetch_channel_data(name, base_url):
             soup = BeautifulSoup(resp.text, 'html.parser')
             items = soup.select('.views-row, .item, .node-article')
             if not items: break
+            
             found_older = False
             for it in items:
                 t_el = it.select_one('.views-field-title a, .title a, h2 a')
@@ -38,15 +44,27 @@ def fetch_channel_data(name, base_url):
                         dt_m = re.search(r'\d{4}-\d{2}-\d{2}', d_el.get_text())
                         post_dt = datetime.strptime(dt_m.group(), '%Y-%m-%d')
                     except: continue
-                    if post_dt < cutoff: (found_older := True); continue
+                    
+                    if post_dt < cutoff:
+                        found_older = True
+                        continue
+                    
                     path = t_el['href']
                     full_url = "https://www.ithome.com.tw" + path if path.startswith('/') else path
                     real_author = get_real_author(full_url)
+                    
                     iso = post_dt.isocalendar()
                     mon = post_dt - timedelta(days=post_dt.weekday())
                     sun = mon + timedelta(days=6)
                     wk = f"W{iso[1]:02d} ({mon.strftime('%m/%d')}-{sun.strftime('%m/%d')})"
-                    articles.append({'url_p':path,'ch':name,'author':real_author,'week':wk,'title':t_el.get_text(strip=True)})
+                    
+                    articles.append({
+                        'url_p': path,
+                        'ch': name,
+                        'author': real_author,
+                        'week': wk,
+                        'title': t_el.get_text(strip=True)
+                    })
             if found_older: break
         except: break
     return articles
@@ -57,7 +75,7 @@ def create_web_page(data):
     df = pd.DataFrame(data)
     if df.empty: return
 
-    # 作者表
+    # 作者表 (不重複計)
     df_a = df.drop_duplicates(subset=['url_p']).copy()
     a_piv = df_a.pivot_table(index='author', columns='week', values='title', aggfunc='count', fill_value=0)
     a_piv['總計'] = a_piv.sum(axis=1)
@@ -75,10 +93,8 @@ def create_web_page(data):
 
     cl, cv = df.groupby('ch').size().index.tolist(), df.groupby('ch').size().values.tolist()
 
-    # --- 核心優化：為發文量 > 5 的儲存格加上 HTML class ---
+    # 自動標記發文量 > 5 的儲存格
     def stylize_table(html_str):
-        # 匹配數字大於 5 的儲存格 (正則表達式)
-        # 排除作者名、總計、日均等非週發文量的部分
         pattern = r'<td>([6-9]|[1-9][0-9]+)</td>'
         replacement = r'<td class="high-productivity">\1</td>'
         return re.sub(pattern, replacement, html_str)
@@ -89,48 +105,43 @@ def create_web_page(data):
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
-        body{{background:#f0f2f5;padding:15px;font-family:"Segoe UI",Meiryo,sans-serif;font-size:13px;}}
-        .card{{border:none;box-shadow:0 2px 8px rgba(0,0,0,0.08);margin-bottom:15px;border-radius:8px;}}
-        .card-header{{background:#fff;font-weight:bold;padding:8px 15px;border-bottom:1px solid #eee;color:#0560bd;}}
-        .table{{margin-bottom:0;}}
-        .table thead{{background:#343a40;color:#fff;}}
-        .table-sm th, .table-sm td{{padding:4px 8px!important;text-align:center;border-color:#e9ecef;}}
-        .table-responsive{{max-height:600px;overflow:auto;}}
-        .table thead th{{position:sticky;top:0;z-index:2;background:#343a40;}}
+        body{{background:#f0f2f5;padding:10px;font-family:sans-serif;font-size:12px;line-height:1.2;}}
+        .card{{border:none;box-shadow:0 1px 4px rgba(0,0,0,0.05);margin-bottom:10px;border-radius:4px;}}
+        .card-header{{background:#fff;font-weight:bold;padding:4px 10px;border-bottom:1px solid #eee;color:#0560bd;font-size:12px;}}
+        .table thead th{{background:#2c3e50!important;color:#ffffff!important;border-color:#34495e;position:sticky;top:0;z-index:2;}}
+        .table-sm th, .table-sm td{{padding:1px 4px!important;text-align:center;border-color:#dee2e6;vertical-align:middle;}}
+        .table-responsive{{max-height:75vh;overflow:auto;}}
         .table td:first-child, .table th:first-child {{
             position:sticky;left:0;z-index:1;background:#f8f9fa!important;text-align:left!important;
-            font-weight:bold;min-width:100px;box-shadow:2px 0 5px rgba(0,0,0,0.05);
+            font-weight:bold;min-width:85px;box-shadow:1px 0 3px rgba(0,0,0,0.05);
         }}
-        /* 高產能樣式：發文 > 5 篇 */
-        .high-productivity {{
-            background-color: #d4edda !important;
-            color: #155724 !important;
-            font-weight: bold !important;
-        }}
-        .table thead th:first-child{{z-index:3;}}
-        h4{{font-weight:bold;color:#0d6efd;margin-bottom:15px;}}
+        .table thead th:first-child{{z-index:3;color:#ffffff!important;}}
+        .high-productivity {{background-color:#c3e6cb!important;color:#155724!important;font-weight:bold!important;}}
+        h5{{font-weight:bold;color:#0d6efd;margin-bottom:8px;font-size:16px;}}
     </style></head>
     <body><div class="container-fluid">
-        <h4>📊 iThome 2026 數據戰情室</h4>
-        <div class="row">
+        <h5>📊 iThome 2026 數據戰情室</h5>
+        <div class="row g-2">
             <div class="col-xl-9">
-                <div class="card"><div class="card-header">👤 記者發文實績 (不重複計)</div>
+                <div class="card"><div class="card-header">👤 記者發文實績</div>
                 <div class="table-responsive">{html_author_table}</div></div>
-                <div class="card"><div class="card-header">📅 頻道經營統計 (全站置頂)</div>
+                <div class="card"><div class="card-header">📅 頻道經營統計</div>
                 <div class="table-responsive">{c_piv.to_html(classes='table table-bordered table-sm table-hover', border=0)}</div></div>
             </div>
             <div class="col-xl-3">
-                <div class="card"><div class="card-body"><canvas id="c"></canvas></div></div>
-                <div class="text-muted small">更新：{now.strftime('%m/%d %H:%M')} | 統計天數：{days}天</div>
+                <div class="card"><div class="card-body p-2"><canvas id="c"></canvas></div></div>
+                <div class="text-muted" style="font-size:10px;">最後更新：{now.strftime('%m/%d %H:%M')} | 統計：{days}天</div>
             </div>
         </div>
     </div>
-    <script>new Chart(document.getElementById('c'),{{type:'doughnut',data:{{labels:{json.dumps(cl,ensure_ascii=False)},datasets:[{{data:{json.dumps(cv)},backgroundColor:['#0d6efd','#6610f2','#6f42c1','#d63384','#dc3545','#fd7e14','#ffc107','#20c997']}}]}},options:{{plugins:{{legend:{{position:'bottom',labels:{{boxWidth:12,font:{{size:11}}}}}}}}}})}});</script>
+    <script>new Chart(document.getElementById('c'),{{type:'doughnut',data:{{labels:{json.dumps(cl,ensure_ascii=False)},datasets:[{{data:{json.dumps(cv)},backgroundColor:['#0d6efd','#6610f2','#6f42c1','#d63384','#dc3545','#fd7e14','#ffc107','#20c997']}}]}},options:{{plugins:{{legend:{{position:'bottom',labels:{{boxWidth:10,font:{{size:10}}}}}}}}}})}});</script>
     </body></html>"""
     with open("index.html", "w", encoding="utf-8") as f: f.write(html)
 
 if __name__ == "__main__":
     urls = {"全站最新":"https://www.ithome.com.tw/latest","永續IT":"https://www.ithome.com.tw/sustainableit","醫療IT":"https://www.ithome.com.tw/healthit","AI":"https://www.ithome.com.tw/ai","Cloud":"https://www.ithome.com.tw/cloud","人物":"https://www.ithome.com.tw/people","資安":"https://www.ithome.com.tw/security"}
     res = []
-    for n, u in urls.items(): res.extend(fetch_channel_data(n, u))
+    for n, u in urls.items():
+        print(f"正在處理: {n}")
+        res.extend(fetch_channel_data(n, u))
     if res: create_web_page(res)
