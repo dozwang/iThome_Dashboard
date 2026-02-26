@@ -75,6 +75,16 @@ def create_web_page(data):
 
     cl, cv = df.groupby('ch').size().index.tolist(), df.groupby('ch').size().values.tolist()
 
+    # --- 核心優化：為發文量 > 5 的儲存格加上 HTML class ---
+    def stylize_table(html_str):
+        # 匹配數字大於 5 的儲存格 (正則表達式)
+        # 排除作者名、總計、日均等非週發文量的部分
+        pattern = r'<td>([6-9]|[1-9][0-9]+)</td>'
+        replacement = r'<td class="high-productivity">\1</td>'
+        return re.sub(pattern, replacement, html_str)
+
+    html_author_table = stylize_table(a_piv.to_html(classes='table table-bordered table-sm table-hover', border=0))
+
     html = f"""<!DOCTYPE html><html lang="zh-TW"><head><meta charset="UTF-8">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -85,15 +95,19 @@ def create_web_page(data):
         .table{{margin-bottom:0;}}
         .table thead{{background:#343a40;color:#fff;}}
         .table-sm th, .table-sm td{{padding:4px 8px!important;text-align:center;border-color:#e9ecef;}}
-        /* 固定左側首欄 */
         .table-responsive{{max-height:600px;overflow:auto;}}
         .table thead th{{position:sticky;top:0;z-index:2;background:#343a40;}}
         .table td:first-child, .table th:first-child {{
             position:sticky;left:0;z-index:1;background:#f8f9fa!important;text-align:left!important;
             font-weight:bold;min-width:100px;box-shadow:2px 0 5px rgba(0,0,0,0.05);
         }}
+        /* 高產能樣式：發文 > 5 篇 */
+        .high-productivity {{
+            background-color: #d4edda !important;
+            color: #155724 !important;
+            font-weight: bold !important;
+        }}
         .table thead th:first-child{{z-index:3;}}
-        .total-cell{{background:#fffdec!important;font-weight:bold;color:#d9534f;}}
         h4{{font-weight:bold;color:#0d6efd;margin-bottom:15px;}}
     </style></head>
     <body><div class="container-fluid">
@@ -101,7 +115,7 @@ def create_web_page(data):
         <div class="row">
             <div class="col-xl-9">
                 <div class="card"><div class="card-header">👤 記者發文實績 (不重複計)</div>
-                <div class="table-responsive">{a_piv.to_html(classes='table table-bordered table-sm table-hover', border=0)}</div></div>
+                <div class="table-responsive">{html_author_table}</div></div>
                 <div class="card"><div class="card-header">📅 頻道經營統計 (全站置頂)</div>
                 <div class="table-responsive">{c_piv.to_html(classes='table table-bordered table-sm table-hover', border=0)}</div></div>
             </div>
