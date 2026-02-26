@@ -1,96 +1,108 @@
 import requests
 from bs4 import BeautifulSoup
-from datetime import datetime, timedelta
+from datetime import datetime
 import pandas as pd
-import os
+import time
 
-def fetch_data():
+def fetch_channel_data(channel_name, url):
     articles = []
-    # 模擬瀏覽器，避免被 iThome 阻擋
     headers = {
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36'
     }
-    
     cutoff_date = datetime(2026, 1, 1)
     
-    for page in range(0, 5):
-        url = f"https://www.ithome.com.tw/latest?page={page}"
-        try:
-            resp = requests.get(url, headers=headers, timeout=10)
-            soup = BeautifulSoup(resp.text, 'html.parser')
-            # 修正後的選擇器
-            items = soup.select('.views-row')
+    print(f"正在爬取 {channel_name}: {url}")
+    try:
+        resp = requests.get(url, headers=headers, timeout=15)
+        if resp.status_code != 200:
+            print(f"無法存取 {channel_name}, Status: {resp.status_code}")
+            return []
+        
+        soup = BeautifulSoup(resp.text, 'html.parser')
+        # 頻道頁面的文章通常位於 .item 或 .views-row
+        items = soup.select('.views-row')
+        
+        for item in items:
+            title_el = item.select_one('.views-field-title a')
+            date_el = item.select_one('.views-field-created')
+            author_el = item.select_one('.views-field-field-author')
             
-            if not items:
-                break
-
-            for item in items:
-                title_el = item.select_one('.views-field-title a')
-                date_el = item.select_one('.views-field-created')
-                author_el = item.select_one('.views-field-field-author')
-                cat_el = item.select_one('.views-field-field-article-category')
-
-                if title_el and date_el:
-                    post_date = datetime.strptime(date_str := date_el.text.strip(), '%Y-%m-%d')
-                    if post_date < cutoff_date:
-                        return articles
-                    
-                    articles.append({
-                        'title': title_el.text.strip(),
-                        'url': "https://www.ithome.com.tw" + title_el['href'],
-                        'author': author_el.text.strip() if author_el else "未知作者",
-                        'channel': cat_el.text.strip() if cat_el else "未分類",
-                        'date': post_date,
-                        'week': f"W{post_date.isocalendar().week:02d}"
-                    })
-        except Exception as e:
-            print(f"爬取第 {page} 頁時發生錯誤: {e}")
-            
+            if title_el and date_el:
+                date_str = date_el.text.strip()
+                post_date = datetime.strptime(date_str, '%Y-%m-%d')
+                
+                if post_date < cutoff_date:
+                    continue
+                
+                articles.append({
+                    'channel': channel_name,
+                    'title': title_el.text.strip(),
+                    'url': "https://www.ithome.com.tw" + title_el['href'],
+                    'author': author_el.text.strip() if author_el else "iThome 編輯",
+                    'date': post_date,
+                    'week': f"W{post_date.isocalendar().week:02d}"
+                })
+    except Exception as e:
+        print(f"爬取 {channel_name} 發生錯誤: {e}")
+        
     return articles
 
-def create_web_page(articles):
-    # 如果沒資料，建立一個帶有欄位的空 DataFrame 避免 KeyError
-    cols = ['title', 'url', 'author', 'channel', 'date', 'week']
-    df = pd.DataFrame(articles, columns=cols)
-
+def create_web_page(all_articles):
+    df = pd.DataFrame(all_articles)
     if df.empty:
-        html_content = "<html><body><h1>目前尚無資料</h1><p>請確認爬蟲是否成功抓取 iThome 網頁。</p></body></html>"
-    else:
-        # 進行統計
-        weekly_pivot = df.pivot_table(index='author', columns='week', values='title', aggfunc='count', fill_value=0)
-        channel_pivot = df.pivot_table(index='author', columns='channel', values='title', aggfunc='count', fill_value=0)
-        
-        # 過去一個月清單
-        one_month_ago = datetime.now() - timedelta(days=30)
-        list_df = df[df['date'] >= one_month_ago].copy()
-        list_df['title'] = list_df.apply(lambda x: f'<a href="{x["url"]}" target="_blank">{x["title"]}</a>', axis=1)
-        list_df = list_df[['date', 'author', 'channel', 'title']].sort_values('date', ascending=False)
+        with open("index.html", "w", encoding="utf-8") as f:
+            f.write("<html><body><h1>目前尚無 2026 年資料</h1></body></html>")
+        return
 
-        html_content = f"""
-        <!DOCTYPE html>
-        <html lang="zh-TW">
-        <head>
-            <meta charset="UTF-8">
-            <title>iThome 報表戰情室</title>
-            <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
-            <style>body {{ padding: 20px; }} .card {{ margin-bottom: 20px; }} table {{ font-size: 0.9rem; }}</style>
-        </head>
-        <body>
-            <div class="container">
-                <h1 class="mb-4">📊 iThome 作者發文戰情室 (2026)</h1>
-                <p>最後更新：{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}</p>
-                <div class="card"><div class="card-body"><h5>📅 每週發文統計</h5>{weekly_pivot.to_html(classes='table table-bordered table-striped')}</div></div>
-                <div class="card"><div class="card-body"><h5>🏷️ 頻道分布</h5>{channel_pivot.to_html(classes='table table-bordered table-striped')}</div></div>
-                <div class="card"><div class="card-body"><h5>📝 過去一個月文章清單</h5>{list_df.to_html(classes='table table-hover', escape=False, index=False)}</div></div>
-            </div>
-        </body>
-        </html>
-        """
+    # 1. 各頻道每週文章數量統計
+    channel_weekly = df.pivot_table(index='channel', columns='week', values='title', aggfunc='count', fill_value=0)
+    
+    # 2. 每個作者的文章統計 (包含頻道分布)
+    author_stats = df.pivot_table(index='author', columns='channel', values='title', aggfunc='count', fill_value=0)
+    
+    # 3. 過去一個月文章詳細清單
+    list_df = df.sort_values('date', ascending=False).copy()
+    list_df['title'] = list_df.apply(lambda x: f'<a href="{x["url"]}" target="_blank">{x["title"]}</a>', axis=1)
+    list_df = list_df[['date', 'channel', 'author', 'title']]
 
+    html_content = f"""
+    <!DOCTYPE html>
+    <html lang="zh-TW">
+    <head>
+        <meta charset="UTF-8">
+        <title>iThome 頻道戰情室</title>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+        <style>body {{ padding: 30px; background-color: #f4f7f6; }} .card {{ margin-bottom: 25px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }}</style>
+    </head>
+    <body>
+        <div class="container">
+            <h1 class="mb-4">🚀 iThome 多頻道發文戰情室</h1>
+            <p class="text-muted">更新時間：{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}</p>
+            
+            <div class="card"><div class="card-body"><h5 class="card-title">📅 頻道每週發文量</h5>{channel_weekly.to_html(classes='table table-hover table-bordered')}</div></div>
+            <div class="card"><div class="card-body"><h5 class="card-title">👤 作者與頻道貢獻</h5>{author_stats.to_html(classes='table table-hover table-bordered')}</div></div>
+            <div class="card"><div class="card-body"><h5 class="card-title">📝 最新文章清單 (2026)</h5>{list_df.to_html(classes='table table-sm', escape=False, index=False)}</div></div>
+        </div>
+    </body>
+    </html>
+    """
     with open("index.html", "w", encoding="utf-8") as f:
         f.write(html_content)
 
 if __name__ == "__main__":
-    data = fetch_data()
-    print(f"成功抓取 {len(data)} 篇文章")
-    create_web_page(data)
+    channels = {
+        "永續IT": "https://www.ithome.com.tw/sustainableit",
+        "醫療IT": "https://www.ithome.com.tw/healthit",
+        "AI": "https://www.ithome.com.tw/ai",
+        "Cloud": "https://www.ithome.com.tw/cloud",
+        "人物": "https://www.ithome.com.tw/people",
+        "資安": "https://www.ithome.com.tw/security"
+    }
+    
+    all_data = []
+    for name, url in channels.items():
+        all_data.extend(fetch_channel_data(name, url))
+        time.sleep(1) # 避免請求過於頻繁
+    
+    create_web_page(all_data)
+    print(f"完成！共抓取 {len(all_data)} 篇文章。")
