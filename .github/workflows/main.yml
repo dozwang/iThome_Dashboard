@@ -1,32 +1,13 @@
-name: Update Dashboard Page
+name: iThome Data Update
 
 on:
-  schedule:
-    - cron: '0 2 * * *' # 台灣時間早上 10 點更新
-  workflow_dispatch:
+schedule:
+- cron: '0 0 * * *' # 每天凌晨執行一次 (UTC)
+workflow_dispatch: # 支援手動觸發執行
 
 jobs:
-  build-and-deploy:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-
-      - name: Setup Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.9'
-
-      - name: Install dependencies
-        run: pip install requests beautifulsoup4 pandas
-
-      - name: Run Scraper
-        run: python scraper.py
-
-      - name: Deploy to GitHub Pages
-        run: |
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git add index.html
-          git commit -m "Update Dashboard $(date +'%Y-%m-%d')" || exit 0
-          git push
+build:
+runs-on: ubuntu-latest
+steps:
+- name: Checkout Repository
+uses: actions/checkout@v3
