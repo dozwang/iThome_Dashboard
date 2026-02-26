@@ -8,15 +8,19 @@
         .table{margin-bottom:0;}
         .table thead{background:#343a40;color:#fff;}
         .table-sm th, .table-sm td{padding:4px 8px!important;text-align:center;border-color:#e9ecef;}
-        /* 固定左側首欄 */
         .table-responsive{max-height:600px;overflow:auto;}
         .table thead th{position:sticky;top:0;z-index:2;background:#343a40;}
         .table td:first-child, .table th:first-child {
             position:sticky;left:0;z-index:1;background:#f8f9fa!important;text-align:left!important;
             font-weight:bold;min-width:100px;box-shadow:2px 0 5px rgba(0,0,0,0.05);
         }
+        /* 高產能樣式：發文 > 5 篇 */
+        .high-productivity {
+            background-color: #d4edda !important;
+            color: #155724 !important;
+            font-weight: bold !important;
+        }
         .table thead th:first-child{z-index:3;}
-        .total-cell{background:#fffdec!important;font-weight:bold;color:#d9534f;}
         h4{font-weight:bold;color:#0d6efd;margin-bottom:15px;}
     </style></head>
     <body><div class="container-fluid">
@@ -58,52 +62,52 @@
       <th>李建興</th>
       <td>0</td>
       <td>3</td>
-      <td>15</td>
-      <td>15</td>
-      <td>16</td>
-      <td>21</td>
-      <td>11</td>
-      <td>11</td>
-      <td>92</td>
+      <td class="high-productivity">15</td>
+      <td class="high-productivity">15</td>
+      <td class="high-productivity">16</td>
+      <td class="high-productivity">21</td>
+      <td class="high-productivity">11</td>
+      <td class="high-productivity">11</td>
+      <td class="high-productivity">92</td>
       <td>1.61</td>
     </tr>
     <tr>
       <th>周峻佑</th>
       <td>0</td>
       <td>0</td>
-      <td>18</td>
-      <td>20</td>
-      <td>18</td>
-      <td>24</td>
+      <td class="high-productivity">18</td>
+      <td class="high-productivity">20</td>
+      <td class="high-productivity">18</td>
+      <td class="high-productivity">24</td>
       <td>0</td>
-      <td>11</td>
-      <td>91</td>
+      <td class="high-productivity">11</td>
+      <td class="high-productivity">91</td>
       <td>1.60</td>
     </tr>
     <tr>
       <th>林妍溱</th>
       <td>0</td>
       <td>1</td>
-      <td>16</td>
-      <td>16</td>
-      <td>15</td>
-      <td>16</td>
-      <td>6</td>
-      <td>5</td>
-      <td>75</td>
-      <td>1.32</td>
+      <td class="high-productivity">16</td>
+      <td class="high-productivity">16</td>
+      <td class="high-productivity">15</td>
+      <td class="high-productivity">16</td>
+      <td class="high-productivity">6</td>
+      <td class="high-productivity">6</td>
+      <td class="high-productivity">76</td>
+      <td>1.33</td>
     </tr>
     <tr>
       <th>陳曉莉</th>
       <td>1</td>
       <td>1</td>
-      <td>17</td>
-      <td>17</td>
-      <td>11</td>
-      <td>11</td>
+      <td class="high-productivity">17</td>
+      <td class="high-productivity">17</td>
+      <td class="high-productivity">11</td>
+      <td class="high-productivity">11</td>
       <td>4</td>
-      <td>7</td>
-      <td>69</td>
+      <td class="high-productivity">7</td>
+      <td class="high-productivity">69</td>
       <td>1.21</td>
     </tr>
     <tr>
@@ -111,12 +115,12 @@
       <td>0</td>
       <td>0</td>
       <td>3</td>
-      <td>9</td>
-      <td>8</td>
-      <td>9</td>
+      <td class="high-productivity">9</td>
+      <td class="high-productivity">8</td>
+      <td class="high-productivity">9</td>
       <td>0</td>
-      <td>7</td>
-      <td>36</td>
+      <td class="high-productivity">7</td>
+      <td class="high-productivity">36</td>
       <td>0.63</td>
     </tr>
     <tr>
@@ -126,24 +130,24 @@
       <td>3</td>
       <td>3</td>
       <td>2</td>
-      <td>7</td>
+      <td class="high-productivity">7</td>
       <td>0</td>
       <td>0</td>
-      <td>18</td>
+      <td class="high-productivity">18</td>
       <td>0.32</td>
     </tr>
     <tr>
       <th>蘇文彬</th>
       <td>2</td>
-      <td>1</td>
-      <td>2</td>
-      <td>1</td>
-      <td>1</td>
-      <td>8</td>
       <td>0</td>
       <td>2</td>
-      <td>17</td>
-      <td>0.30</td>
+      <td>1</td>
+      <td>1</td>
+      <td class="high-productivity">8</td>
+      <td>0</td>
+      <td>2</td>
+      <td class="high-productivity">16</td>
+      <td>0.28</td>
     </tr>
     <tr>
       <th>李宗翰</th>
@@ -155,7 +159,7 @@
       <td>1</td>
       <td>1</td>
       <td>0</td>
-      <td>15</td>
+      <td class="high-productivity">15</td>
       <td>0.26</td>
     </tr>
     <tr>
@@ -168,7 +172,7 @@
       <td>3</td>
       <td>0</td>
       <td>1</td>
-      <td>15</td>
+      <td class="high-productivity">15</td>
       <td>0.26</td>
     </tr>
     <tr>
@@ -181,7 +185,7 @@
       <td>5</td>
       <td>0</td>
       <td>1</td>
-      <td>13</td>
+      <td class="high-productivity">13</td>
       <td>0.23</td>
     </tr>
     <tr>
@@ -194,7 +198,7 @@
       <td>5</td>
       <td>0</td>
       <td>1</td>
-      <td>11</td>
+      <td class="high-productivity">11</td>
       <td>0.19</td>
     </tr>
     <tr>
@@ -257,13 +261,13 @@
     <tr>
       <th>全站最新</th>
       <td>0</td>
-      <td>12</td>
+      <td>11</td>
       <td>85</td>
       <td>95</td>
       <td>78</td>
       <td>112</td>
       <td>22</td>
-      <td>46</td>
+      <td>47</td>
       <td>450</td>
     </tr>
     <tr>
@@ -343,7 +347,7 @@
             </div>
             <div class="col-xl-3">
                 <div class="card"><div class="card-body"><canvas id="c"></canvas></div></div>
-                <div class="text-muted small">更新：02/26 11:38 | 統計天數：57天</div>
+                <div class="text-muted small">更新：02/26 11:56 | 統計天數：57天</div>
             </div>
         </div>
     </div>
