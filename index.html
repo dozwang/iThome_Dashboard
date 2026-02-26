@@ -4,34 +4,34 @@
         <head>
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>iThome 2026 戰情室 - 2026-02-26 09:12</title>
+            <title>iThome 2026 戰情室</title>
             <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
             <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
             <style>
                 body { background-color: #f8f9fa; padding: 25px; font-family: "Microsoft JhengHei", sans-serif; }
-                .card { border: none; box-shadow: 0 4px 12px rgba(0,0,0,0.08); margin-bottom: 25px; border-radius: 12px; }
+                .card { border: none; box-shadow: 0 4px 15px rgba(0,0,0,0.05); margin-bottom: 30px; border-radius: 15px; }
+                .card-header { background-color: #fff; border-bottom: 1px solid #eee; font-weight: bold; color: #0d6efd; }
+                .table thead { background: #212529; color: white; }
+                .table-sm td, .table-sm th { font-size: 0.9rem; text-align: center; vertical-align: middle; }
+                .author-name { text-align: left !important; font-weight: bold; background: #fdfdfd; }
+                .total-col { background-color: #e9ecef; font-weight: bold; }
                 h2 { color: #0d6efd; font-weight: bold; }
-                .table thead { background: #212529; color: white; text-align: center; font-size: 0.9rem; }
-                .table td { text-align: center; vertical-align: middle; }
-                .author-cell { font-weight: bold; color: #495057; text-align: left !important; }
-                .stat-info { font-size: 0.85rem; color: #6c757d; margin-bottom: 10px; }
             </style>
         </head>
         <body>
             <div class="container-fluid">
-                <div class="d-flex justify-content-between align-items-end mb-4 px-2">
-                    <div>
-                        <h2>📊 iThome 數據統計戰情室</h2>
-                        <div class="stat-info">自動追蹤 2026 年起之發文產能</div>
-                    </div>
-                    <span class="badge bg-dark mb-2">最後更新 (台北)：2026-02-26 09:12</span>
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h2>📊 iThome 作者發文戰情室</h2>
+                    <span class="badge bg-dark">最後更新：2026-02-26 09:17 (台北)</span>
                 </div>
-                
+
                 <div class="row">
-                    <div class="col-xl-9">
-                        <div class="card"><div class="card-body">
-                            <h5 class="fw-bold mb-3">👤 作者發文實績 <small class="text-muted fw-normal">(排除分流，真實產量)</small></h5>
-                            <div class="table-responsive"><table class="dataframe table table-hover table-bordered table-sm">
+                    <div class="col-lg-9">
+                        <div class="card">
+                            <div class="card-header">👤 每位作者每週發文實績 (不重複計)</div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="dataframe table table-bordered table-hover table-sm">
   <thead>
     <tr style="text-align: right;">
       <th>week_label</th>
@@ -43,9 +43,11 @@
       <th>W07 (02/09-02/15)</th>
       <th>W08 (02/16-02/22)</th>
       <th>W09 (02/23-03/01)</th>
+      <th>總計</th>
     </tr>
     <tr>
       <th>author</th>
+      <th></th>
       <th></th>
       <th></th>
       <th></th>
@@ -67,14 +69,19 @@
       <td>44</td>
       <td>19</td>
       <td>42</td>
+      <td>151</td>
     </tr>
   </tbody>
-</table></div>
-                        </div></div>
-                        
-                        <div class="card"><div class="card-body">
-                            <h5 class="fw-bold mb-3">📅 頻道經營產量 <small class="text-muted fw-normal">(含跨頻道重複計算)</small></h5>
-                            <div class="table-responsive"><table class="dataframe table table-hover table-bordered table-sm">
+</table>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card">
+                            <div class="card-header">📅 頻道每週發文統計 (含全站最新 & 分流重複計)</div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="dataframe table table-bordered table-hover table-sm">
   <thead>
     <tr style="text-align: right;">
       <th>week_label</th>
@@ -86,9 +93,11 @@
       <th>W07 (02/09-02/15)</th>
       <th>W08 (02/16-02/22)</th>
       <th>W09 (02/23-03/01)</th>
+      <th>總計</th>
     </tr>
     <tr>
       <th>channel</th>
+      <th></th>
       <th></th>
       <th></th>
       <th></th>
@@ -110,6 +119,7 @@
       <td>21</td>
       <td>13</td>
       <td>11</td>
+      <td>45</td>
     </tr>
     <tr>
       <th>Cloud</th>
@@ -121,6 +131,7 @@
       <td>13</td>
       <td>0</td>
       <td>0</td>
+      <td>45</td>
     </tr>
     <tr>
       <th>人物</th>
@@ -132,6 +143,7 @@
       <td>1</td>
       <td>0</td>
       <td>0</td>
+      <td>5</td>
     </tr>
     <tr>
       <th>全站最新</th>
@@ -143,6 +155,7 @@
       <td>0</td>
       <td>3</td>
       <td>42</td>
+      <td>45</td>
     </tr>
     <tr>
       <th>永續IT</th>
@@ -154,6 +167,7 @@
       <td>0</td>
       <td>0</td>
       <td>6</td>
+      <td>12</td>
     </tr>
     <tr>
       <th>資安</th>
@@ -165,6 +179,7 @@
       <td>19</td>
       <td>8</td>
       <td>54</td>
+      <td>84</td>
     </tr>
     <tr>
       <th>醫療IT</th>
@@ -176,345 +191,35 @@
       <td>3</td>
       <td>0</td>
       <td>0</td>
+      <td>27</td>
     </tr>
   </tbody>
-</table></div>
-                        </div></div>
+</table>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    
-                    <div class="col-xl-3">
-                        <div class="card"><div class="card-body">
-                            <h5 class="fw-bold mb-4">📈 頻道分佈佔比</h5>
-                            <canvas id="channelChart"></canvas>
-                        </div></div>
+
+                    <div class="col-lg-3">
+                        <div class="card">
+                            <div class="card-header">📈 頻道分佈佔比</div>
+                            <div class="card-body">
+                                <canvas id="channelChart"></canvas>
+                            </div>
+                        </div>
                     </div>
                 </div>
-
-                <div class="card"><div class="card-body">
-                    <h5 class="fw-bold mb-3">📝 2026 文章明細 <small class="text-muted fw-normal">(顯示最新 60 筆)</small></h5>
-                    <div class="table-responsive"><table class="dataframe table table-striped table-hover">
-  <thead>
-    <tr style="text-align: right;">
-      <th>date</th>
-      <th>author</th>
-      <th>title_link</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>2026-02-26</td>
-      <td>iThome 編輯</td>
-      <td><a href="https://www.ithome.com.tw/news/174051" target="_blank">Splunk Enterprise Windows版存在DLL劫持漏洞，恐成SYSTEM提權跳板</a></td>
-    </tr>
-    <tr>
-      <td>2026-02-25</td>
-      <td>iThome 編輯</td>
-      <td><a href="https://www.ithome.com.tw/news/174032" target="_blank">酷澎韓國資料外洩事故最新調查結果出爐，臺灣逾20萬用戶受影響</a></td>
-    </tr>
-    <tr>
-      <td>2026-02-25</td>
-      <td>iThome 編輯</td>
-      <td><a href="https://www.ithome.com.tw/news/174053" target="_blank">Google發布Chrome安全更新，修補3項高風險漏洞，恐導致資料外洩與惡意程式碼執行</a></td>
-    </tr>
-    <tr>
-      <td>2026-02-25</td>
-      <td>iThome 編輯</td>
-      <td><a href="https://www.ithome.com.tw/news/174052" target="_blank">【資安日報】2月25日，中國APT駭客以稅務與雲端發票為誘餌，在臺灣散布惡意軟體</a></td>
-    </tr>
-    <tr>
-      <td>2026-02-25</td>
-      <td>iThome 編輯</td>
-      <td><a href="https://www.ithome.com.tw/news/174049" target="_blank">隱藏號碼成詐騙新破口，NCC與三大電信聯手將以語音警示提高民眾警覺心</a></td>
-    </tr>
-    <tr>
-      <td>2026-02-25</td>
-      <td>iThome 編輯</td>
-      <td><a href="https://www.ithome.com.tw/news/174048" target="_blank">中國駭客Silver Fox假借稅務及電子發票名義為幌子，在臺灣散布惡意軟體Winos 4.0</a></td>
-    </tr>
-    <tr>
-      <td>2026-02-25</td>
-      <td>iThome 編輯</td>
-      <td><a href="https://www.ithome.com.tw/news/174040" target="_blank">Cloudflare重新打造Next.js相容框架Vinext，解決無伺服器部署痛點</a></td>
-    </tr>
-    <tr>
-      <td>2026-02-25</td>
-      <td>iThome 編輯</td>
-      <td><a href="https://www.ithome.com.tw/news/174050" target="_blank">北韓駭客Lazarus使用勒索軟體Medusa在美國與中東發動攻擊</a></td>
-    </tr>
-    <tr>
-      <td>2026-02-25</td>
-      <td>iThome 編輯</td>
-      <td><a href="https://www.ithome.com.tw/news/174034" target="_blank">React開發者最看好編譯器新功能，伺服器端元件評價仍分歧</a></td>
-    </tr>
-    <tr>
-      <td>2026-02-25</td>
-      <td>iThome 編輯</td>
-      <td><a href="https://www.ithome.com.tw/news/174038" target="_blank">AI軍事化爭議升溫，五角大廈要求Claude全面開放</a></td>
-    </tr>
-    <tr>
-      <td>2026-02-25</td>
-      <td>iThome 編輯</td>
-      <td><a href="https://www.ithome.com.tw/news/174036" target="_blank">IT外包商Conduent資料外洩影響再擴大到逾2,500萬人</a></td>
-    </tr>
-    <tr>
-      <td>2026-02-25</td>
-      <td>iThome 編輯</td>
-      <td><a href="https://www.ithome.com.tw/news/174035" target="_blank">AMD與Meta達成6GW GPU協議，附帶最多1.6億股績效型權證</a></td>
-    </tr>
-    <tr>
-      <td>2026-02-25</td>
-      <td>iThome 編輯</td>
-      <td><a href="https://www.ithome.com.tw/news/174023" target="_blank">盜版Office安裝檔成誘餌，XMRig挖礦攻擊濫用驅動程式漏洞並可透過USB擴散</a></td>
-    </tr>
-    <tr>
-      <td>2026-02-24</td>
-      <td>iThome 編輯</td>
-      <td><a href="https://www.ithome.com.tw/news/174011" target="_blank">接棒Semantic Kernel與AutoGen，微軟統一代理框架Agent Framework進入RC階段</a></td>
-    </tr>
-    <tr>
-      <td>2026-02-24</td>
-      <td>iThome 編輯</td>
-      <td><a href="https://www.ithome.com.tw/news/174022" target="_blank">Agent要省錢不能只靠模型！Claude Code團隊揭五大提示詞快取心法</a></td>
-    </tr>
-    <tr>
-      <td>2026-02-24</td>
-      <td>iThome 編輯</td>
-      <td><a href="https://www.ithome.com.tw/news/174016" target="_blank">AWS代理式IDE Kiro新增兩種工作流程，限縮AI代理程式碼改動範圍</a></td>
-    </tr>
-    <tr>
-      <td>2026-02-24</td>
-      <td>iThome 編輯</td>
-      <td><a href="https://www.ithome.com.tw/news/174021" target="_blank">Pure Storage更名為Everpure，強調從儲存基礎架構走向資料管理</a></td>
-    </tr>
-    <tr>
-      <td>2026-02-24</td>
-      <td>iThome 編輯</td>
-      <td><a href="https://www.ithome.com.tw/news/174020" target="_blank">台灣大用AI協助數萬基地臺節能，2025年省下1,800萬度電</a></td>
-    </tr>
-    <tr>
-      <td>2026-02-24</td>
-      <td>iThome 編輯</td>
-      <td><a href="https://www.ithome.com.tw/news/174015" target="_blank">【資安日報】2月24日，NPM蠕蟲SANDWORM_MODE企圖竊取加密貨幣金鑰與開發相關機密</a></td>
-    </tr>
-    <tr>
-      <td>2026-02-24</td>
-      <td>iThome 編輯</td>
-      <td><a href="https://www.ithome.com.tw/news/174019" target="_blank">玉山金揭露虛擬資產金融三大方向，聚焦穩定幣支付和實體資產代幣化</a></td>
-    </tr>
-    <tr>
-      <td>2026-02-24</td>
-      <td>iThome 編輯</td>
-      <td><a href="https://www.ithome.com.tw/news/174012" target="_blank">駭客利用BeyondTrust重大漏洞從事攻擊，意圖散布Web Shell與後門VShell、SparkRAT</a></td>
-    </tr>
-    <tr>
-      <td>2026-02-24</td>
-      <td>iThome 編輯</td>
-      <td><a href="https://www.ithome.com.tw/news/174014" target="_blank">心理健康App曝上千漏洞，治療紀錄恐成高價黑市資料</a></td>
-    </tr>
-    <tr>
-      <td>2026-02-24</td>
-      <td>iThome 編輯</td>
-      <td><a href="https://www.ithome.com.tw/news/174010" target="_blank">Anthropic指控DeepSeek等中國AI業者以2.4萬詐欺帳戶蒸餾Claude能力</a></td>
-    </tr>
-    <tr>
-      <td>2026-02-24</td>
-      <td>iThome 編輯</td>
-      <td><a href="https://www.ithome.com.tw/news/174009" target="_blank">19個惡意NPM套件發動SANDWORM_MODE蠕蟲攻擊，竊取加密貨幣金鑰與CI/CD機密，還鎖定AI開發工具</a></td>
-    </tr>
-    <tr>
-      <td>2026-02-24</td>
-      <td>iThome 編輯</td>
-      <td><a href="https://www.ithome.com.tw/news/174007" target="_blank">社交工程攻擊ClickFix出現新手法，駭客藉由查詢惡意DNS取得有效酬載</a></td>
-    </tr>
-    <tr>
-      <td>2026-02-24</td>
-      <td>iThome 編輯</td>
-      <td><a href="https://www.ithome.com.tw/news/174008" target="_blank">OpenAI推論API新增WebSocket模式，代理式工具呼叫流程最高可加速40%</a></td>
-    </tr>
-    <tr>
-      <td>2026-02-24</td>
-      <td>iThome 編輯</td>
-      <td><a href="https://www.ithome.com.tw/news/174006" target="_blank">JetBrains發布VS Code擴充套件，可一鍵轉換Java檔成Kotlin</a></td>
-    </tr>
-    <tr>
-      <td>2026-02-24</td>
-      <td>iThome 編輯</td>
-      <td><a href="https://www.ithome.com.tw/news/173999" target="_blank">國際刑警組織與非洲16國聯手打詐，逮捕651人、追回430萬美元</a></td>
-    </tr>
-    <tr>
-      <td>2026-02-24</td>
-      <td>iThome 編輯</td>
-      <td><a href="https://www.ithome.com.tw/news/174005" target="_blank">Cloudflare推出新MCP伺服器，僅兩介面簡化全套Cloudflare API存取</a></td>
-    </tr>
-    <tr>
-      <td>2026-02-24</td>
-      <td>iThome 編輯</td>
-      <td><a href="https://www.ithome.com.tw/news/174000" target="_blank">矽谷3工程師被控竊取Google處理器商業機密，資料疑流向伊朗</a></td>
-    </tr>
-    <tr>
-      <td>2026-02-23</td>
-      <td>iThome 編輯</td>
-      <td><a href="https://www.ithome.com.tw/news/173994" target="_blank">駭客冒用公務員帳密入侵FICOBA，法國120萬筆銀行帳戶資料恐外洩</a></td>
-    </tr>
-    <tr>
-      <td>2026-02-23</td>
-      <td>iThome 編輯</td>
-      <td><a href="https://www.ithome.com.tw/news/174003" target="_blank">圓山大飯店資訊系統被入侵，顧客資料恐遭竊</a></td>
-    </tr>
-    <tr>
-      <td>2026-02-23</td>
-      <td>iThome 編輯</td>
-      <td><a href="https://www.ithome.com.tw/news/174001" target="_blank">新型態安卓惡意軟體PromptSpy濫用Gemini持續在受害裝置活動</a></td>
-    </tr>
-    <tr>
-      <td>2026-02-23</td>
-      <td>iThome 編輯</td>
-      <td><a href="https://www.ithome.com.tw/news/174004" target="_blank">【資安日報】2月23日，駭客濫用AI對Fortinet防火牆發動大規模攻擊</a></td>
-    </tr>
-    <tr>
-      <td>2026-02-23</td>
-      <td>iThome 編輯</td>
-      <td><a href="https://www.ithome.com.tw/news/173998" target="_blank">Google發布Chrome 145更新，PDFium與V8兩項高風險漏洞恐致任意程式碼執行</a></td>
-    </tr>
-    <tr>
-      <td>2026-02-23</td>
-      <td>iThome 編輯</td>
-      <td><a href="https://www.ithome.com.tw/news/173996" target="_blank">駭客濫用AI在55個國家入侵逾600個組態配置不當的Fortinet防火牆，企圖發動勒索軟體攻擊</a></td>
-    </tr>
-    <tr>
-      <td>2026-02-23</td>
-      <td>iThome 編輯</td>
-      <td><a href="https://www.ithome.com.tw/news/173997" target="_blank">Claude Code加入資安掃描新能力，Anthropic開放企業與團隊用戶申請試用</a></td>
-    </tr>
-    <tr>
-      <td>2026-02-23</td>
-      <td>iThome 編輯</td>
-      <td><a href="https://www.ithome.com.tw/news/173992" target="_blank">ShinyHunters疑竊取80萬資料勒索賭城飯店</a></td>
-    </tr>
-    <tr>
-      <td>2026-02-23</td>
-      <td>iThome 編輯</td>
-      <td><a href="https://www.ithome.com.tw/news/173991" target="_blank">數學家設下研究級試金石，OpenAI挑戰First Proof</a></td>
-    </tr>
-    <tr>
-      <td>2026-02-23</td>
-      <td>iThome 編輯</td>
-      <td><a href="https://www.ithome.com.tw/news/173990" target="_blank">臭蟲問題導致Microsoft 365 Copilot讀取企業機密信件加入摘要</a></td>
-    </tr>
-    <tr>
-      <td>2026-02-23</td>
-      <td>iThome 編輯</td>
-      <td><a href="https://www.ithome.com.tw/news/173989" target="_blank">半導體測試設備大廠愛德萬測試遭勒索軟體攻擊，客戶與員工資料恐外洩</a></td>
-    </tr>
-    <tr>
-      <td>2026-02-23</td>
-      <td>iThome 編輯</td>
-      <td><a href="https://www.ithome.com.tw/news/173993" target="_blank">美國招募科技志工以協助各國導入American AI</a></td>
-    </tr>
-    <tr>
-      <td>2026-02-21</td>
-      <td>iThome 編輯</td>
-      <td><a href="https://www.ithome.com.tw/news/173984" target="_blank">OpenAI與Paradigm合推基準測試EVMbench，評測AI代理智慧合約漏洞攻防能力</a></td>
-    </tr>
-    <tr>
-      <td>2026-02-21</td>
-      <td>iThome 編輯</td>
-      <td><a href="https://www.ithome.com.tw/news/173983" target="_blank">NIST啟動AI代理標準倡議力促互通與安全</a></td>
-    </tr>
-    <tr>
-      <td>2026-02-21</td>
-      <td>iThome 編輯</td>
-      <td><a href="https://www.ithome.com.tw/review/173982" target="_blank">採用自家ASIC與矽光子網路技術，輝達推出新款800G交換器</a></td>
-    </tr>
-    <tr>
-      <td>2026-02-20</td>
-      <td>iThome 編輯</td>
-      <td><a href="https://www.ithome.com.tw/news/173981" target="_blank">OpenClaw創辦人Peter Steinberger加入OpenAI，OpenClaw將轉型為開源基金會的專案運作</a></td>
-    </tr>
-    <tr>
-      <td>2026-02-20</td>
-      <td>iThome 編輯</td>
-      <td><a href="https://www.ithome.com.tw/news/173986" target="_blank">Anthropic攜手Infosys擴大印度布局</a></td>
-    </tr>
-    <tr>
-      <td>2026-02-20</td>
-      <td>iThome 編輯</td>
-      <td><a href="https://www.ithome.com.tw/news/173987" target="_blank">Google公布Gemini 3.1 Pro，推理能力為前代2倍</a></td>
-    </tr>
-    <tr>
-      <td>2026-02-19</td>
-      <td>iThome 編輯</td>
-      <td><a href="https://www.ithome.com.tw/news/173978" target="_blank">Claude Sonnet 4.6登陸GitHub Copilot</a></td>
-    </tr>
-    <tr>
-      <td>2026-02-19</td>
-      <td>iThome 編輯</td>
-      <td><a href="https://www.ithome.com.tw/news/173979" target="_blank">李飛飛的World Labs完成10億美元融資，Nvidia、AMD、Autodesk加持</a></td>
-    </tr>
-    <tr>
-      <td>2026-02-18</td>
-      <td>iThome 編輯</td>
-      <td><a href="https://www.ithome.com.tw/news/173977" target="_blank">BeyondTrust RS與PRA存在命令注入漏洞，CISA列KEV限期修補</a></td>
-    </tr>
-    <tr>
-      <td>2026-02-18</td>
-      <td>iThome 編輯</td>
-      <td><a href="https://www.ithome.com.tw/news/173973" target="_blank">Meta旗下Manus個人代理進駐Telegram，支援語音、圖片與多步驟任務</a></td>
-    </tr>
-    <tr>
-      <td>2026-02-18</td>
-      <td>iThome 編輯</td>
-      <td><a href="https://www.ithome.com.tw/news/173975" target="_blank">Dell虛擬機器資料復原軟體出現CVSS 10.0零日漏洞，疑似中國駭客潛伏利用超過一年</a></td>
-    </tr>
-    <tr>
-      <td>2026-02-18</td>
-      <td>iThome 編輯</td>
-      <td><a href="https://www.ithome.com.tw/news/173974" target="_blank">日本華盛頓飯店遭勒索軟體竊取資料</a></td>
-    </tr>
-    <tr>
-      <td>2026-02-18</td>
-      <td>iThome 編輯</td>
-      <td><a href="https://www.ithome.com.tw/news/173976" target="_blank">Anthropic新中階模型Claude Sonnet 4.6主打程式開發與電腦操控，支援百萬詞元</a></td>
-    </tr>
-    <tr>
-      <td>2026-02-17</td>
-      <td>iThome 編輯</td>
-      <td><a href="https://www.ithome.com.tw/news/173971" target="_blank">Gemini CLI擴充套件Conductor現可自動審查程式碼與檢核規格</a></td>
-    </tr>
-    <tr>
-      <td>2026-02-17</td>
-      <td>iThome 編輯</td>
-      <td><a href="https://www.ithome.com.tw/news/173972" target="_blank">Chrome修補CSS高風險漏洞CVE-2026-2441，Google確認已遭實際利用</a></td>
-    </tr>
-    <tr>
-      <td>2026-02-16</td>
-      <td>iThome 編輯</td>
-      <td><a href="https://www.ithome.com.tw/news/173967" target="_blank">LV、Dior、Tiffany資料外洩遭南韓政府罰款2500萬美元</a></td>
-    </tr>
-    <tr>
-      <td>2026-02-16</td>
-      <td>iThome 編輯</td>
-      <td><a href="https://www.ithome.com.tw/news/173969" target="_blank">Microsoft Configuration Manager的2024年RCE漏洞正遭到濫用</a></td>
-    </tr>
-    <tr>
-      <td>2026-02-16</td>
-      <td>iThome 編輯</td>
-      <td><a href="https://www.ithome.com.tw/news/173968" target="_blank">OpenClaw發起人加入OpenAI，專案將轉為基金會、維持開源獨立</a></td>
-    </tr>
-  </tbody>
-</table></div>
-                </div></div>
             </div>
 
             <script>
-                new Chart(document.getElementById('channelChart'), {
+                const ctx = document.getElementById('channelChart').getContext('2d');
+                new Chart(ctx, {
                     type: 'doughnut',
                     data: {
                         labels: ["資安", "Cloud", "AI", "全站最新", "醫療IT", "永續IT", "人物"],
                         datasets: [{
                             data: [84, 45, 45, 45, 27, 12, 5],
-                            backgroundColor: ['#0d6efd', '#6610f2', '#6f42c1', '#d63384', '#dc3545', '#fd7e14', '#ffc107', '#20c997'],
-                            borderWidth: 2
+                            backgroundColor: ['#0d6efd', '#6610f2', '#6f42c1', '#d63384', '#dc3545', '#fd7e14', '#ffc107', '#20c997']
                         }]
                     },
                     options: { responsive: true, plugins: { legend: { position: 'bottom' } } }
