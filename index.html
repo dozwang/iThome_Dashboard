@@ -1,9 +1,30 @@
-<!DOCTYPE html><html lang="zh-TW"><head><meta charset="UTF-8"><title>2026 戰情室</title>
+<!DOCTYPE html><html lang="zh-TW"><head><meta charset="UTF-8">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <style>body{background:#f8f9fa;padding:25px;font-family:sans-serif;}.card{border:none;box-shadow:0 4px 15px rgba(0,0,0,0.1);margin-bottom:25px;border-radius:12px;}.table thead{background:#212529;color:#fff;}.table td{text-align:center;}.table td:first-child{text-align:left!important;font-weight:bold;background:#fafafa;padding-left:15px;}</style></head>
-    <body><div class="container-fluid"><h2>📊 iThome 2026 數據統計戰情室</h2><p class="text-muted">最後更新：2026-02-26 11:08</p>
-    <div class="row"><div class="col-xl-9"><div class="card"><div class="card-header fw-bold">👤 記者發文實績 (內頁真實姓名)</div><div class="table-responsive"><table class="dataframe table table-bordered table-sm">
+    <style>
+        body{background:#f0f2f5;padding:15px;font-family:"Segoe UI",Meiryo,sans-serif;font-size:13px;}
+        .card{border:none;box-shadow:0 2px 8px rgba(0,0,0,0.08);margin-bottom:15px;border-radius:8px;}
+        .card-header{background:#fff;font-weight:bold;padding:8px 15px;border-bottom:1px solid #eee;color:#0560bd;}
+        .table{margin-bottom:0;}
+        .table thead{background:#343a40;color:#fff;}
+        .table-sm th, .table-sm td{padding:4px 8px!important;text-align:center;border-color:#e9ecef;}
+        /* 固定左側首欄 */
+        .table-responsive{max-height:600px;overflow:auto;}
+        .table thead th{position:sticky;top:0;z-index:2;background:#343a40;}
+        .table td:first-child, .table th:first-child {
+            position:sticky;left:0;z-index:1;background:#f8f9fa!important;text-align:left!important;
+            font-weight:bold;min-width:100px;box-shadow:2px 0 5px rgba(0,0,0,0.05);
+        }
+        .table thead th:first-child{z-index:3;}
+        .total-cell{background:#fffdec!important;font-weight:bold;color:#d9534f;}
+        h4{font-weight:bold;color:#0d6efd;margin-bottom:15px;}
+    </style></head>
+    <body><div class="container-fluid">
+        <h4>📊 iThome 2026 數據戰情室</h4>
+        <div class="row">
+            <div class="col-xl-9">
+                <div class="card"><div class="card-header">👤 記者發文實績 (不重複計)</div>
+                <div class="table-responsive"><table class="dataframe table table-bordered table-sm table-hover">
   <thead>
     <tr style="text-align: right;">
       <th></th>
@@ -19,7 +40,7 @@
       <th>日均</th>
     </tr>
     <tr>
-      <th>作者姓名</th>
+      <th>作者</th>
       <th></th>
       <th></th>
       <th></th>
@@ -68,22 +89,22 @@
       <td>15</td>
       <td>16</td>
       <td>6</td>
-      <td>4</td>
-      <td>74</td>
-      <td>1.30</td>
+      <td>5</td>
+      <td>75</td>
+      <td>1.32</td>
     </tr>
     <tr>
       <th>陳曉莉</th>
       <td>1</td>
-      <td>2</td>
+      <td>1</td>
       <td>17</td>
       <td>17</td>
       <td>11</td>
       <td>11</td>
       <td>4</td>
       <td>7</td>
-      <td>70</td>
-      <td>1.23</td>
+      <td>69</td>
+      <td>1.21</td>
     </tr>
     <tr>
       <th>王珮瑤</th>
@@ -204,7 +225,8 @@
     </tr>
   </tbody>
 </table></div></div>
-    <div class="card"><div class="card-header fw-bold">📅 頻道產能統計</div><div class="table-responsive"><table class="dataframe table table-bordered table-sm">
+                <div class="card"><div class="card-header">📅 頻道經營統計 (全站置頂)</div>
+                <div class="table-responsive"><table class="dataframe table table-bordered table-sm table-hover">
   <thead>
     <tr style="text-align: right;">
       <th></th>
@@ -219,7 +241,7 @@
       <th>總計</th>
     </tr>
     <tr>
-      <th>頻道名稱</th>
+      <th>頻道</th>
       <th></th>
       <th></th>
       <th></th>
@@ -235,13 +257,13 @@
     <tr>
       <th>全站最新</th>
       <td>0</td>
-      <td>13</td>
+      <td>12</td>
       <td>85</td>
       <td>95</td>
       <td>78</td>
       <td>112</td>
       <td>22</td>
-      <td>45</td>
+      <td>46</td>
       <td>450</td>
     </tr>
     <tr>
@@ -262,10 +284,10 @@
       <td>0</td>
       <td>0</td>
       <td>0</td>
-      <td>21</td>
+      <td>20</td>
       <td>29</td>
       <td>13</td>
-      <td>12</td>
+      <td>13</td>
       <td>75</td>
     </tr>
     <tr>
@@ -317,6 +339,13 @@
       <td>4</td>
     </tr>
   </tbody>
-</table></div></div></div>
-    <div class="col-xl-3"><div class="card"><div class="card-body"><canvas id="c"></canvas></div></div></div></div></div>
-    <script>new Chart(document.getElementById('c'),{type:'doughnut',data:{labels:["AI", "Cloud", "人物", "全站最新", "永續IT", "資安", "醫療IT"],datasets:[{data:[75, 54, 5, 450, 4, 140, 9],backgroundColor:['#0d6efd','#6610f2','#6f42c1','#d63384','#dc3545','#fd7e14','#ffc107','#20c997']}]}});</script></body></html>
+</table></div></div>
+            </div>
+            <div class="col-xl-3">
+                <div class="card"><div class="card-body"><canvas id="c"></canvas></div></div>
+                <div class="text-muted small">更新：02/26 11:38 | 統計天數：57天</div>
+            </div>
+        </div>
+    </div>
+    <script>new Chart(document.getElementById('c'),{type:'doughnut',data:{labels:["AI", "Cloud", "人物", "全站最新", "永續IT", "資安", "醫療IT"],datasets:[{data:[75, 54, 5, 450, 4, 140, 9],backgroundColor:['#0d6efd','#6610f2','#6f42c1','#d63384','#dc3545','#fd7e14','#ffc107','#20c997']}]},options:{plugins:{legend:{position:'bottom',labels:{boxWidth:12,font:{size:11}}}}})});</script>
+    </body></html>
