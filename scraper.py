@@ -21,7 +21,9 @@ def fetch_channel_data(name, base_url):
     articles = []
     headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'}
     cutoff = datetime(2026, 1, 1)
+    # 全站抓取深度增加，子頻道確保抓完前 10 頁
     max_p = 60 if name == "全站最新" else 10
+    
     for page in range(max_p):
         try:
             resp = requests.get(f"{base_url}?page={page}", headers=headers, timeout=15)
@@ -29,7 +31,7 @@ def fetch_channel_data(name, base_url):
             soup = BeautifulSoup(resp.text, 'html.parser')
             items = soup.select('.views-row, .item, .node-article')
             if not items: break
-            found_older = False
+            
             for it in items:
                 t_el = it.select_one('.views-field-title a, .title a, h2 a')
                 d_el = it.select_one('.views-field-created, .post-at, .date, .created, .time')
@@ -38,7 +40,11 @@ def fetch_channel_data(name, base_url):
                         dt_m = re.search(r'\d{4}-\d{2}-\d{2}', d_el.get_text())
                         post_dt = datetime.strptime(dt_m.group(), '%Y-%m-%d')
                     except: continue
-                    if post_dt < cutoff: (found_older := True); continue
+                    
+                    # 核心修正：檢查該則時間，不屬於 2026 區間的直接跳過，但不停止爬取
+                    if post_dt < cutoff:
+                        continue
+                    
                     path = t_el['href']
                     full_url = "https://www.ithome.com.tw" + path if path.startswith('/') else path
                     real_author = get_real_author(full_url)
@@ -47,7 +53,10 @@ def fetch_channel_data(name, base_url):
                     sun = mon + timedelta(days=6)
                     wk = f"W{iso[1]:02d} ({mon.strftime('%m/%d')}-{sun.strftime('%m/%d')})"
                     articles.append({'url_p':path,'ch':name,'author':real_author,'week':wk,'title':t_el.get_text(strip=True)})
-            if found_older: break
+            
+            # 全站最新頻道若已經出現大量舊文，可提早結束以節省時間
+            # 子頻道則建議跑完 max_p 以免遺漏被置頂文夾雜的新文
+            time.sleep(0.1)
         except: break
     return articles
 
@@ -65,24 +74,20 @@ def create_web_page(data):
     oth_c = c_piv.drop(index='全站最新', errors='ignore').sort_values('總計', ascending=False)
     c_piv = pd.concat([top_c, oth_c])
 
-    # 2. 記者發文實績 (改為直式：Index 為週數, Columns 為記者)
+    # 2. 記者發文實績 (直式排版)
     df_a = df.drop_duplicates(subset=['url_p']).copy()
     a_piv_raw = df_a.pivot_table(index='author', columns='week', values='title', aggfunc='count', fill_value=0)
-    # 轉置表格讓記者變橫向
-    a_piv = a_piv_raw.transpose()
-    # 按照週數降序排列 (最新的週在上面)
-    a_piv = a_piv.sort_index(ascending=False)
+    a_piv = a_piv_raw.transpose().sort_index(ascending=False)
     a_piv.index.name = "週數"; a_piv.columns.name = None
 
     cl, cv = df.groupby('ch').size().index.tolist(), df.groupby('ch').size().values.tolist()
 
-    # 自動標記發文量 > 5 的儲存格 (直式同樣適用)
     def stylize_table(html_str):
         pattern = r'<td>([6-9]|[1-9][0-9]+)</td>'
         replacement = r'<td class="high-productivity">\1</td>'
         return re.sub(pattern, replacement, html_str)
 
-    html_channel_table = c_piv.to_html(classes='table table-bordered table-sm table-hover', border=0)
+    html_channel_table = stylize_table(c_piv.to_html(classes='table table-bordered table-sm table-hover', border=0))
     html_author_table = stylize_table(a_piv.to_html(classes='table table-bordered table-sm table-hover', border=0))
 
     html = f"""<!DOCTYPE html><html lang="zh-TW"><head><meta charset="UTF-8">
@@ -95,7 +100,6 @@ def create_web_page(data):
         .table thead th{{background:#2c3e50!important;color:#ffffff!important;border-color:#34495e;position:sticky;top:0;z-index:2;}}
         .table-sm th, .table-sm td{{padding:1px 4px!important;text-align:center;border-color:#dee2e6;vertical-align:middle;}}
         .table-responsive{{max-height:80vh;overflow:auto;}}
-        /* 直式表格的首欄(週數)固定 */
         .table td:first-child, .table th:first-child {{
             position:sticky;left:0;z-index:1;background:#f8f9fa!important;text-align:left!important;
             font-weight:bold;min-width:110px;box-shadow:1px 0 3px rgba(0,0,0,0.05);
@@ -115,7 +119,7 @@ def create_web_page(data):
             </div>
             <div class="col-xl-3">
                 <div class="card"><div class="card-body p-2"><canvas id="c"></canvas></div></div>
-                <div class="text-muted" style="font-size:10px;">更新於：{now.strftime('%m/%d %H:%M')}</div>
+                <div class="text-muted" style="font-size:10px;">最後更新：{now.strftime('%m/%d %H:%M')}</div>
             </div>
         </div>
     </div>
